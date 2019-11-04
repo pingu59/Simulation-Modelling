@@ -5,8 +5,13 @@ public abstract class Cache {
   private int cacheSize; //m
   private long time; //clock
   private int miss;
+  private int count;
   private long end;
   private PriorityQueue<Request> requests;
+
+  public int getCacheSize() {
+    return cacheSize;
+  }
 
   public Cache(int dataSize, int cacheSize, long end){
     this.dataSize = dataSize;
@@ -24,17 +29,15 @@ public abstract class Cache {
     miss++;
   }
 
-  public double getMissRate(){ // miss per sec
-    return ((double) miss/time) * 1000;
-  }
+  public double getMissRate(){ return ((double) miss/count) ; }
 
   //get the most recent request, find out next time and add it back to pq
   //updates the clock
   public int nextRequest(){
     Request request = requests.poll();
+    setTime(request.getTime());
     request.toNextArriveTime();
     requests.add(request);
-    time = request.getTime();
     return request.getLabel();
   }
 
@@ -49,6 +52,7 @@ public abstract class Cache {
   public void simulate(){
     while(end > time){
       simulateOne();
+      count++;
     }
   }
 

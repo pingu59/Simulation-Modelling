@@ -15,17 +15,9 @@ public class FIFOCache extends Cache {
   public void simulateOne(){
     int request = nextRequest();
     if(!cache.contains(request)){
-      int victim = cache.poll();
+      incrementMiss();
+      cache.poll();
       cache.addLast(request);
-      System.out.println("At " + getTime() + ": Removing " + victim + ", appending " + request);
-    }else{
-      System.out.println("At " + getTime() + ": Hit " + request);
     }
-  }
-
-  public static void main(String[] args) {
-    Cache c = new FIFOCache(1000, 10, 1000 * 1000L);
-    c.simulate();
-    System.out.println(c.getMissRate());
   }
 }

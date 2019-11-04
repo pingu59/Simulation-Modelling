@@ -1,5 +1,3 @@
-import static java.lang.Math.exp;
-
 public class Request {
   private int label;
   private long time;
@@ -18,10 +16,9 @@ public class Request {
     return time;
   }
 
-  //TODO: change this
   public void toNextArriveTime(){
-    long next = (long)((1. - exp(-1./(double)label)) * 1000);
+    double next = Math.log(1. - Math.random()) / - (1./(double)label);
     //exponential distribution , in millie seconds
-    time += next;
+    time += next * 1000;
   }
 }
