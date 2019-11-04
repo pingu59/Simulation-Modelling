@@ -17,19 +17,12 @@ public abstract class Cache {
     this.dataSize = dataSize;
     this.cacheSize = cacheSize;
     this.end = end;
-    time = 0L;
-    miss = 0;
-    requests = new PriorityQueue<Request>((a, b) -> (int)(a.getTime() - b.getTime()));
-    for(int i = 1; i <= dataSize; i++){
-      requests.add(new Request(i));
-    }
   }
 
   public void incrementMiss(){
     miss++;
   }
 
-  public double getMissRate(){ return ((double) miss/count) ; }
 
   //get the most recent request, find out next time and add it back to pq
   //updates the clock
@@ -49,11 +42,19 @@ public abstract class Cache {
     time = newTime;
   }
 
-  public void simulate(){
+  public double simulate(){
+    time = 0L;
+    miss = 0;
+    count = 0;
+    requests = new PriorityQueue<Request>((a, b) -> (int)(a.getTime() - b.getTime()));
+    for(int i = 1; i <= dataSize; i++){
+      requests.add(new Request(i));
+    }
     while(end > time){
       simulateOne();
       count++;
     }
+    return ((double) miss/count);
   }
 
   public abstract void simulateOne();
